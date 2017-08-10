@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box1 {
+				width: 100px;
+				height: 100px;
+				background-color: red;
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			#box2 {
+				width: 100px;
+				height: 100px;
+				background-color: blue;
+				position: absolute;
+				top: 150px;
+				left: 0;
+			}
+			#box3 {
+				width: 100px;
+				height: 100px;
+				background-color: green;
+				position: absolute;
+				top: 300px;
+				left: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box1"></div>
+		<div id="box2"></div>
+		<div id="box3"></div>
+		<script src="js/jquery-3.2.1.js"></script>
+		<script>
+			//匿名函数的自执行
+			(function() {
+				$.fn.extend({
+					drag: function() {
+						//获取this对象，这里this代表调用此方法的那个JQ对象
+						var $this = this;
+						//绑定事件
+						$this.on("mousedown", function(e) {
+
+							//获取鼠标初始的位置
+							var mX = e.pageX;
+							var mY = e.pageY;
+
+							//获取被拖拽的对象位置
+							var thisX = $(this).offset().left;
+							var thisY = $(this).offset().top;
+							$(document).on("mousemove", function(e) {
+								
+								//获取鼠标当前的位置
+								var mX2 = e.pageX;
+								var mY2 = e.pageY;
+
+								//计算鼠标移动差值
+								var lessX = mX2 - mX;
+								var lessY = mY2 - mY;
+								
+								console.log(lessX + ":" + lessY);
+								
+								$this.css({
+									top: thisY + lessY + "px",
+									left: thisX + lessX + "px"
+								});
+
+							})
+							
+							$(document).on("mouseup",function(){
+								$(document).off("mousemove");
+							})
+
+						})
+					}
+				});
+
+			})();
+
+			$(function() {
+				$("#box1").drag();
+				$("#box2").drag();
+				$("#box3").drag();
+			})
+		</script>
+	</body>
+
+</html>
